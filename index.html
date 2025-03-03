@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <style>
+        /* General Styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            width: 100%;
+        }
+        .card-container {
+            position: relative;
+            width: 350px;
+            height: 500px;
+            perspective: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .card {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            transition: transform 1s;
+        }
+        .card.open {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+            box-sizing: border-box; /* Prevents stretching */
+            overflow: hidden; /* Prevents unwanted expansion */
+            padding: 20px; /* Adds spacing inside */
+        }
+        .card-front {
+            background: #ffeb3b;
+            color: #ff758c;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+        }
+        .card-back {
+            background: white;
+            color: black;
+            transform: rotateY(180deg);
+            flex-direction: column;
+            text-align: center;
+        }
+        .balloons {
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            top: 0;
+            left: 0;
+        }
+        .balloon {
+            position: absolute;
+            bottom: -100px;
+            width: 50px;
+            height: 70px;
+            background: red;
+            border-radius: 50%;
+            animation: float 5s linear infinite;
+        }
+        .string {
+            position: absolute;
+            width: 2px;
+            height: 50px;
+            background: white;
+            left: 50%;
+            bottom: -50px;
+            transform: translateX(-50%);
+            animation: wiggle 1s infinite alternate ease-in-out;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-100vh);
+            }
+        }
+        @keyframes wiggle {
+            0% {
+                transform: translateX(-50%) rotate(-5deg);
+            }
+            100% {
+                transform: translateX(-50%) rotate(5deg);
+            }
+        }
+        /* Video Fix */
+        .video-container {
+            width: 100%;
+            max-width: 320px; /* Matches card width */
+            position: relative;
+        }
+        video {
+            width: 100%;
+            height: 180px; /* Fixed height */
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+            object-fit: cover; /* Ensures proper scaling */
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="balloons" id="balloons"></div>
+        <div class="card-container" onclick="toggleCard()">
+            <div class="card" id="card">
+                <div class="card-front">🎁 Click to Open 🎉</div>
+                <div class="card-back">
+                    <h1>🎉 Happy Birthday, Guenn!🎂</h1>
+                    <p>Wishing you a day filled with joy, love, and all the things that make you happiest.
+                        May this year bring you new adventures, unforgettable moments, and all the success you deserve.
+                        I’m beyond grateful to know you, and I can’t wait to create more beautiful memories with you. 🎁✨</p>
+                    <!-- Video Section -->
+                    <div class="video-container">
+                        <video id="birthdayVideo" loop  >
+                            <source src="0303.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isOpen = false;
+
+        function toggleCard() {
+            let card = document.getElementById("card");
+            let video = document.getElementById("birthdayVideo");
+
+            if (!isOpen) {
+                card.classList.add("open");
+                video.play();
+                createBalloons(50);
+            } else {
+                card.classList.remove("open");
+                video.pause();
+                video.currentTime = ""; // Reset video
+            }
+            isOpen = !isOpen;
+        }
+
+        function createBalloons(num) {
+            for (let i = 0; i < num; i++) {
+                let balloon = document.createElement("div");
+                balloon.classList.add("balloon");
+                balloon.style.left = Math.random() * 100 + "vw";
+                balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                balloon.style.animationDuration = Math.random() * 3 + 3 + "s";
+
+                let string = document.createElement("div");
+                string.classList.add("string");
+                balloon.appendChild(string);
+
+                document.getElementById("balloons").appendChild(balloon);
+            }
+        }
+    </script>
+</body>
+</html>
